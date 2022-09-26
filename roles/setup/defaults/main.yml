@@ -1,0 +1,17 @@
+# cred details
+ansible_vyos_user: ansible-vyos
+ansible_vyos_user_fullname: "AnsibleVyOS" # no spaces allowed?
+ansible_vyos_password: "changeme123"
+# ansible_vyos_user_level: "admin" # possibly unnecessary, default admin
+
+# sshkey options
+ansible_vyos_sshkey_enabled: false # wip, cannot configure sshkey w/ ansible?
+ansible_vyos_user_sshkey_path: "inventories/sample/id_rsa.pub"
+
+# host options
+ansible_vyos_hostname: "vyos"
+ansible_vyos_domain: "local"
+ansible_vyos_upstream_dns: "1.1.1.1"
+
+# timezone
+ansible_vyos_timezone: "UTC"

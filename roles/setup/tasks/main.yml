@@ -1,0 +1,46 @@
+---
+- name: Configure VyOS
+  when: setup_enabled is true
+  block:
+    - name: Create Ansible VyOS user
+      when: ansible_vyos_sshkey_enabled is false
+      no_log: true
+      vyos.vyos.vyos_user:
+        name: "{{ ansible_vyos_user }}"
+        full_name: "{{ ansible_vyos_user_fullname }}"
+        configured_password: "{{ ansible_vyos_password }}"
+        state: present
+
+    - name: 'Configure System (hostname, domain, upstream dns)'
+      vyos.vyos.vyos_system:
+        host_name: "{{ ansible_vyos_hostname }}"
+        domain_name: "{{ ansible_vyos_domain }}"
+        name_servers: "{{ ansible_vyos_upstream_dns }}"
+
+
+    - name: 'system | timezone | configure timezone'
+      vyos.vyos.vyos_config:
+        lines:
+          - set system time-zone {{ ansible_vyos_timezone }}
+
+    # TODO: Syslog
+    # - name: 'system | syslog | configure remote syslog'
+    #   vyos.vyos.vyos_config:
+    #     lines:
+    #       - "set system syslog host {{ vyos_remote_syslog['endpoint'] }} facility all level all"
+    #       - "set system syslog host {{ vyos_remote_syslog['endpoint'] }} facility all protocol tcp"
+    #       - "set system syslog host {{ vyos_remote_syslog['endpoint'] }} format octet-counted"
+    #       - "set system syslog host {{ vyos_remote_syslog['endpoint'] }} port {{ vyos_remote_syslog['port'] }}"
+    #   when:
+    #     - vyos_remote_syslog['enabled'] is defined
+    #     - vyos_remote_syslog['endpoint'] is defined
+    #     - vyos_remote_syslog['port'] is defined
+    #     - vyos_remote_syslog['enabled']
+
+    # - name: 'system | syslog | remove remote syslog'
+    #   vyos.vyos.vyos_config:
+    #     lines:
+    #       - "delete system syslog host"
+    #   when:
+    #     - vyos_remote_syslog['enabled'] is defined
+    #     - not vyos_remote_syslog['enabled']

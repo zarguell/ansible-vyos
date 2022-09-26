@@ -1,0 +1,12 @@
+---
+- name: Run Ansible VyOS
+  hosts: all
+
+  roles:
+    ###
+    ### Requirements
+    ###
+    - role: setup
+      tags:
+        - setup
+      when: (setup_enabled | default(False))
